@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Pressable,
+  Image,
 } from 'react-native';
 
 import { useTimer } from '../utils/useTimer';
@@ -14,7 +15,7 @@ import { useTimer } from '../utils/useTimer';
 const HomeIndex = () => {
   const pathname = usePathname();
   const time = useTimer();
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   return (
     <ScrollView
@@ -27,7 +28,7 @@ const HomeIndex = () => {
       </View>
       <Text>Time: {time}</Text>
       <Spacer />
-      <Link href="/">
+      <Link href="/" unstable_transition="zoom">
         <Link.Trigger>Link.Preview: /</Link.Trigger>
         <Link.Preview />
       </Link>
@@ -40,10 +41,10 @@ const HomeIndex = () => {
       <Link href="/one">
         <Link.Trigger>Normal link with trigger: /one</Link.Trigger>
       </Link>
-      <Link href="/one" asChild>
+      <Link href="/one" asChild unstable_transition="zoom">
         <Link.Trigger>
           <TouchableOpacity>
-            <Text>Normal link with trigger asChild: /one</Text>
+            <Text>Normal link with trigger asChild: /one with zoom</Text>
           </TouchableOpacity>
         </Link.Trigger>
       </Link>
@@ -63,8 +64,8 @@ const HomeIndex = () => {
           </TouchableOpacity>
         </Link.Trigger>
       </Link>
-      <Link href="/one">
-        <Link.Trigger>Link.Preview: /one</Link.Trigger>
+      <Link href="/one" unstable_transition="zoom">
+        <Link.Trigger>Link.Preview: /one with zoom</Link.Trigger>
         <Link.Preview />
       </Link>
       <Link href="/one">
@@ -130,7 +131,6 @@ const HomeIndex = () => {
         <Link.Preview />
       </Link>
       <Spacer />
-      {/* @ts-expect-error */}
       <Link href="/404">
         <Link.Trigger>Link.Preview: Unmatched Route</Link.Trigger>
         <Link.Preview />
@@ -139,6 +139,44 @@ const HomeIndex = () => {
         <Link.Trigger>Link.Preview: Sitemap</Link.Trigger>
         <Link.Preview />
       </Link>
+      <Spacer />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          gap: 8,
+          width: '100%',
+        }}>
+        <Link href="/zoom-dest" unstable_transition="zoom" asChild>
+          <Link.Trigger>
+            <Pressable style={{ flex: 1, aspectRatio: width / height }}>
+              <Image
+                source={require('../../../assets/frog.jpg')}
+                resizeMode="cover"
+                style={{ width: '100%', height: '100%' }}
+              />
+            </Pressable>
+          </Link.Trigger>
+        </Link>
+        <Link href="/zoom-dest" unstable_transition="zoom" asChild>
+          <Link.Trigger>
+            <Pressable style={{ flex: 2, alignItems: 'center' }}>
+              <View style={{ width: '50%', aspectRatio: width / height }}>
+                <Image
+                  source={require('../../../assets/frog.jpg')}
+                  resizeMode="cover"
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </View>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', textAlign: 'center' }}>
+                The frog
+              </Text>
+              <Text style={{ textAlign: 'center' }}>Photo by David Clode on Unsplash</Text>
+            </Pressable>
+          </Link.Trigger>
+        </Link>
+      </View>
     </ScrollView>
   );
 };
