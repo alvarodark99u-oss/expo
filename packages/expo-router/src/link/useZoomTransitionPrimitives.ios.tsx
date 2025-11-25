@@ -9,7 +9,15 @@ import { useIsPreview } from './preview/PreviewRouteContext';
 import { LinkZoomTransitionSource } from './preview/native';
 import { LinkProps } from './useLinkHooks';
 
-export function useZoomTransitionPrimitives({ unstable_transition, href }: LinkProps) {
+const NOOP_COMPONENT = (props: { children: React.ReactNode }) => {
+  return props.children;
+};
+
+export function useZoomTransitionPrimitives({
+  unstable_transition,
+  unstable_transitionAlignmentRect,
+  href,
+}: LinkProps) {
   const isPreview = useIsPreview();
   const zoomTransitionId = useMemo(
     () =>
@@ -23,14 +31,22 @@ export function useZoomTransitionPrimitives({ unstable_transition, href }: LinkP
   );
   const ZoomTransitionWrapper = useMemo(() => {
     if (!zoomTransitionId) {
-      return (props: { children: React.ReactNode }) => props.children;
+      return NOOP_COMPONENT;
     }
     return (props: { children: React.ReactNode }) => (
-      <LinkZoomTransitionSource identifier={zoomTransitionId}>
+      <LinkZoomTransitionSource
+        identifier={zoomTransitionId}
+        alignment={unstable_transitionAlignmentRect}>
         {props.children}
       </LinkZoomTransitionSource>
     );
-  }, [zoomTransitionId]);
+  }, [
+    zoomTransitionId,
+    unstable_transitionAlignmentRect?.x,
+    unstable_transitionAlignmentRect?.y,
+    unstable_transitionAlignmentRect?.width,
+    unstable_transitionAlignmentRect?.height,
+  ]);
   const computedHref = useMemo(() => {
     if (!zoomTransitionId) {
       return href;

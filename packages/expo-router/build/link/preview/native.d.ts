@@ -42,7 +42,15 @@ export declare function NativeLinkPreviewContent(props: NativeLinkPreviewContent
 export declare function LinkZoomTransitionEnabler(props: {
     zoomTransitionSourceIdentifier: string;
 }): import("react").JSX.Element | null;
+interface LinkSourceAlignmentRect {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 export declare function LinkZoomTransitionSource(props: PropsWithChildren<{
     identifier: string;
+    alignment?: LinkSourceAlignmentRect;
 }>): import("react").JSX.Element | null;
+export {};
 //# sourceMappingURL=native.d.ts.map

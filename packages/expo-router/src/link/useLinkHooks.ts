@@ -232,6 +232,12 @@ export interface LinkProps extends Omit<TextProps, 'href'>, WebAnchorProps {
    * @platform ios 18+
    */
   unstable_transition?: 'zoom';
+  unstable_transitionAlignmentRect?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
 
   ref?: Ref<Text>;
 }

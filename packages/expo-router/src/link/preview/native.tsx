@@ -116,12 +116,25 @@ export function LinkZoomTransitionEnabler(props: { zoomTransitionSourceIdentifie
   );
 }
 
+interface LinkSourceAlignmentRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 const LinkZoomTransitionSourceNativeView: React.ComponentType<
-  ViewProps & { identifier: string; disableForceFlatten?: boolean }
+  ViewProps & {
+    identifier: string;
+    disableForceFlatten?: boolean;
+    alignment?: LinkSourceAlignmentRect;
+  }
 > | null = areNativeViewsAvailable
   ? requireNativeView('ExpoRouterNativeLinkPreview', 'LinkZoomTransitionSource')
   : null;
-export function LinkZoomTransitionSource(props: PropsWithChildren<{ identifier: string }>) {
+export function LinkZoomTransitionSource(
+  props: PropsWithChildren<{ identifier: string; alignment?: LinkSourceAlignmentRect }>
+) {
   if (!LinkZoomTransitionSourceNativeView) {
     return null;
   }

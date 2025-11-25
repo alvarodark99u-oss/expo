@@ -41,7 +41,10 @@ const navigationParams_1 = require("../navigationParams");
 const ZoomTransitionEnabler_1 = require("./ZoomTransitionEnabler");
 const PreviewRouteContext_1 = require("./preview/PreviewRouteContext");
 const native_1 = require("./preview/native");
-function useZoomTransitionPrimitives({ unstable_transition, href }) {
+const NOOP_COMPONENT = (props) => {
+    return props.children;
+};
+function useZoomTransitionPrimitives({ unstable_transition, unstable_transitionAlignmentRect, href, }) {
     const isPreview = (0, PreviewRouteContext_1.useIsPreview)();
     const zoomTransitionId = (0, react_1.useMemo)(() => unstable_transition === 'zoom' &&
         !isPreview &&
@@ -51,12 +54,18 @@ function useZoomTransitionPrimitives({ unstable_transition, href }) {
         : undefined, []);
     const ZoomTransitionWrapper = (0, react_1.useMemo)(() => {
         if (!zoomTransitionId) {
-            return (props) => props.children;
+            return NOOP_COMPONENT;
         }
-        return (props) => (<native_1.LinkZoomTransitionSource identifier={zoomTransitionId}>
+        return (props) => (<native_1.LinkZoomTransitionSource identifier={zoomTransitionId} alignment={unstable_transitionAlignmentRect}>
         {props.children}
       </native_1.LinkZoomTransitionSource>);
-    }, [zoomTransitionId]);
+    }, [
+        zoomTransitionId,
+        unstable_transitionAlignmentRect?.x,
+        unstable_transitionAlignmentRect?.y,
+        unstable_transitionAlignmentRect?.width,
+        unstable_transitionAlignmentRect?.height,
+    ]);
     const computedHref = (0, react_1.useMemo)(() => {
         if (!zoomTransitionId) {
             return href;
